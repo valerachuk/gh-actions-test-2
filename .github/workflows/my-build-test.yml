@@ -1,0 +1,58 @@
+name: Test and build
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./angular-deploy-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install npm packages
+        run: npm ci
+
+      - name: Build
+        run: npm run test:prod
+
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./angular-deploy-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install npm packages
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Zip
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r ./angular-deploy-test/build.zip ./angular-deploy-test/dist/angular-deploy-test
+
+      - name: Upload build as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: angular-build
+          path: ./angular-deploy-test/build.zip
