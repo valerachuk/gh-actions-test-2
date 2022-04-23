@@ -46,13 +46,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Zip
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r ./angular-deploy-test/build.zip ./angular-deploy-test/dist/angular-deploy-test
-
       - name: Upload build as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: angular-build
-          path: ./angular-deploy-test/build.zip
+          name: my-angular-build
+          path: ./angular-deploy-test/dist/angular-deploy-test
