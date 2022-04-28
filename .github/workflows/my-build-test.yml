@@ -1,10 +1,8 @@
-name: Test and build
-
+name: Test
 on:
   pull_request:
     branches:
       - master
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,42 +10,7 @@ jobs:
       run:
         working-directory: ./angular-deploy-test
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install npm packages
-        run: npm ci
-
-      - name: Test
-        run: npm run test:prod
-
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./angular-deploy-test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install npm packages
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload build as an artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-angular-build
-          path: ./angular-deploy-test/dist/angular-deploy-test
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm ci
+      - run: npm run test:prod
